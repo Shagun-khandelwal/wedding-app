@@ -327,7 +327,9 @@
 
     <script>
         // Backend API Endpoint - uses whatever URL the page was loaded from
-        const API_ENDPOINT = `${window.location.origin}/api/cloud-store`;
+        const API_ENDPOINT = window.location.hostname === 'localhost' 
+    ? 'http://localhost:3000/api/cloud-store'
+    : 'https://wedding-app-beige-eight.vercel.app/api/cloud-store';
         const LOCAL_STORAGE_KEY = "harshalWeddingTravelLocalBackup_2026";
         
         let travelData = [];
