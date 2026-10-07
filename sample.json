@@ -1,0 +1,17 @@
+[
+  {
+    "id": "1",
+    "name": "Test User",
+    "phone": "9999999999",
+    "members": 2,
+    "transport": "ट्रेन (Train)",
+    "vehicleNo": "12345",
+    "coachNo": "A1",
+    "fromCity": "Mumbai",
+    "toCity": "Pune",
+    "dateTime": "2026-10-07T18:30:00.000Z",
+    "pickupStatus": "पिकअप चाहिए",
+    "comments": "Test booking",
+    "updatedAt": 1696691400000
+  }
+]

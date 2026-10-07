@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✨ हर्षल का शुभ विवाह - यात्रा एवं पिकअप रजिस्टर ✨</title>
+    <style>
+        :root {
+            --primary: #8B0000;
+            --secondary: #DAA520;
+            --accent: #FFF8DC;
+            --dark: #222;
+            --success: #28a745;
+            --info: #17a2b8;
+            --warning: #ffc107;
+            --danger: #dc3545;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #FFF8DC 0%, #fdf5e6 100%);
+            color: var(--dark);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        .header {
+            background: linear-gradient(135deg, #8B0000 0%, #5c0000 100%);
+            color: white;
+            text-align: center;
+            padding: 25px 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border-bottom: 4px solid var(--secondary);
+        }
+        .header h1 { margin: 0; font-size: 26px; color: var(--secondary); text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
+        .header p { margin: 8px 0 0 0; font-size: 15px; opacity: 0.9; }
+
+        .container { max-width: 1050px; margin: 20px auto; padding: 0 15px; }
+
+        /* Passcode Screen */
+        #passcodeScreen {
+            background: white; padding: 35px 25px; border-radius: 12px;
+            text-align: center; box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            max-width: 400px; margin: 60px auto; border-top: 5px solid var(--primary);
+        }
+        #passcodeScreen input {
+            padding: 12px; font-size: 20px; width: 140px; text-align: center;
+            border: 2px solid var(--primary); border-radius: 8px; margin-bottom: 20px;
+            letter-spacing: 5px; outline: none;
+        }
+
+        /* Dashboard & Cards */
+        .card {
+            background: white; padding: 22px; border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08); margin-bottom: 25px;
+            border-top: 4px solid var(--primary);
+        }
+        .stats-row { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 15px; margin-bottom: 22px; }
+        .stat-box {
+            flex: 1; min-width: 130px; background: linear-gradient(135deg, #8B0000 0%, #660000 100%); color: white;
+            text-align: center; padding: 18px 10px; border-radius: 10px; border-bottom: 4px solid var(--secondary);
+            box-shadow: 0 4px 10px rgba(139,0,0,0.2);
+        }
+        .stat-box h3 { margin: 0; font-size: 28px; color: var(--secondary); }
+        .stat-box p { margin: 5px 0 0 0; font-size: 13px; font-weight: 500; }
+
+        .btn {
+            background: linear-gradient(135deg, #8B0000 0%, #660000 100%); color: white; border: none;
+            padding: 12px 22px; border-radius: 8px; font-size: 15px; cursor: pointer;
+            font-weight: bold; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(139,0,0,0.2);
+            display: inline-block; text-align: center; text-decoration: none;
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(139,0,0,0.3); }
+        .btn-block { width: 100%; display: block; box-sizing: border-box; }
+        .btn-whatsapp { background: linear-gradient(135deg, #25D366 0%, #1EBE5D 100%); box-shadow: 0 4px 10px rgba(37,211,102,0.3); color: white; }
+        .btn-back { background: #555; width: auto; margin-bottom: 15px; }
+
+        .sync-badge {
+            background: #e8f5e9; color: #2e7d32; padding: 8px 15px; border-radius: 20px;
+            font-size: 13px; font-weight: bold; display: inline-flex; align-items: center; gap: 6px;
+            margin-bottom: 15px; border: 1px solid #c8e6c9;
+        }
+
+        /* Forms */
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .form-group { margin-bottom: 15px; text-align: left; }
+        .form-group.full-width { grid-column: span 2; }
+        .form-group label { display: block; font-weight: bold; margin-bottom: 6px; color: var(--primary); font-size: 14px; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 11px; border: 1px solid #ccc; border-radius: 8px;
+            box-sizing: border-box; font-size: 15px; background: #fafafa; transition: border 0.3s;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: var(--primary); outline: none; background: white;
+        }
+
+        /* Table */
+        .table-responsive { overflow-x: auto; margin-top: 15px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        table { width: 100%; border-collapse: collapse; background: white; font-size: 14px; min-width: 900px; }
+        th, td { border: 1px solid #eee; padding: 12px 10px; text-align: left; vertical-align: middle; }
+        th { background-color: var(--primary); color: var(--secondary); font-weight: 600; text-transform: uppercase; font-size: 13px; letter-spacing: 0.5px; }
+        tr:nth-child(even) { background-color: #fdfbf7; }
+        tr:hover { background-color: #f5eedc; }
+
+        .badge-pickup {
+            padding: 5px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; display: inline-block; text-align: center;
+        }
+        .pickup-yes { background: #ffe2e2; color: #a71d2a; border: 1px solid #f5c6cb; }
+        .pickup-no { background: #e2e3e5; color: #383d41; border: 1px solid #d6d8db; }
+        .pickup-done { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+
+        .action-btns { display: flex; gap: 4px; flex-wrap: wrap; }
+        .action-btn { padding: 6px 10px; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold; transition: 0.2s; }
+        .edit-btn { background: var(--info); color: white; }
+        .status-btn { background: var(--warning); color: #333; }
+        .del-btn { background: var(--danger); color: white; }
+        .action-btn:hover { opacity: 0.85; transform: scale(1.02); }
+
+        .hidden { display: none !important; }
+
+        /* Transport-specific fields */
+        .train-only, .flight-only, .bus-only { display: none; }
+        .transport-train .train-only { display: block; }
+        .transport-flight .flight-only { display: block; }
+        .transport-bus .bus-only { display: block; }
+
+        /* Member names section */
+        .member-names-section {
+            background: #f5eedc; padding: 20px; border-radius: 8px; margin: 20px 0;
+            border-left: 4px solid var(--primary);
+        }
+        .member-names-section h4 { color: var(--primary); margin-top: 0; }
+        .member-input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .member-input-group { display: flex; align-items: flex-end; gap: 8px; }
+        .member-input-group input { flex: 1; }
+        
+        @media (max-width: 768px) {
+            .form-grid { grid-template-columns: 1fr; }
+            .form-group.full-width { grid-column: span 1; }
+            .member-input-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>✨ हर्षल का शुभ विवाह ✨</h1>
+        <p>पारिवारिक यात्रा एवं पिकअप रजिस्टर (लाइव शेयरिंग डेटाबेस)</p>
+    </div>
+
+    <div class="container">
+        
+        <!-- Passcode Screen -->
+        <div id="passcodeScreen">
+            <h2 style="color: var(--primary); margin-top: 0;">🔒 परिवार सुरक्षा कोड</h2>
+            <p style="color: #666; font-size: 14px;">कृपया आगे बढ़ने के लिए पिन (PIN) दर्ज करें</p>
+            <input type="password" id="pinInput" placeholder="••••" maxlength="4">
+            <br>
+            <button class="btn btn-block" onclick="checkPin()">प्रवेश करें</button>
+        </div>
+
+        <!-- Main Dashboard (Page 1) -->
+        <div id="mainDashboard" class="hidden">
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 10px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div class="sync-badge" id="syncStatusBadge">
+                        🟢 Live Sync Completed
+                    </div>
+                    <span id="userRoleBadge" style="background: #e8f5e9; color: #2e7d32; padding: 8px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; display: inline-flex; align-items: center; gap: 6px; border: 1px solid #c8e6c9;"></span>
+                </div>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button class="btn" onclick="openAddForm()">+ नया यात्रा विवरण जोड़ें</button>
+                    <button class="btn" style="background: #dc3545; box-shadow: 0 4px 10px rgba(220,53,69,0.2);" onclick="logout()">🚪 Logout</button>
+                </div>
+            </div>
+
+            <div class="stats-row">
+                <div class="stat-box">
+                    <h3 id="totalPax">0</h3>
+                    <p>कुल यात्री</p>
+                </div>
+                <div class="stat-box">
+                    <h3 id="totalBookings">0</h3>
+                    <p>कुल बुकिंग्स</p>
+                </div>
+                <div class="stat-box">
+                    <h3 id="pendingPickups">0</h3>
+                    <p>पिकअप बाकी</p>
+                </div>
+            </div>
+
+            <div class="card" style="padding: 15px;">
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center; justify-content: space-between;">
+                    <input type="text" id="searchInput" placeholder="🔍 नाम, शहर, ट्रेन नंबर या फोन से खोजें..." onkeyup="filterTable()" style="padding: 10px; border: 1px solid #ccc; border-radius: 8px; flex: 1; min-width: 250px; font-size: 14px;">
+                    <button class="btn btn-whatsapp" onclick="generateWhatsAppSummary()">📲 व्हाट्सएप समरी कॉपी करें</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 style="color: var(--primary); margin-top: 0; border-bottom: 2px solid var(--secondary); padding-bottom: 8px;">📋 सभी परिवार सदस्यों की यात्रा समरी तालिका</h3>
+                
+                <div class="table-responsive">
+                    <table id="travelTable">
+                        <thead>
+                            <tr>
+                                <th>क्र.सं.</th>
+                                <th>यात्री नाम व संपर्क</th>
+                                <th>गाड़ी / यात्रा विवरण</th>
+                                <th>कोच / सीट</th>
+                                <th>रूट (कहाँ से ➔ कहाँ तक)</th>
+                                <th>आगमन समय</th>
+                                <th>पिकअप स्थिति</th>
+                                <th>टिप्पणी (Comments)</th>
+                                <th>एक्शन (संशोधन / हटाएं)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <!-- Live data will render here -->
+                        </tbody>
+                    </table>
+                </div>
+                <div id="emptyMessage" style="text-align: center; padding: 40px; color: #777; display: none;">
+                    <p style="font-size: 16px; font-weight: bold; color: var(--primary);">📭 अभी तक कोई यात्रा विवरण दर्ज नहीं किया गया है।</p>
+                    <p style="font-size: 14px;">ऊपर दिए गए "+ नया यात्रा विवरण जोड़ें" बटन से अपनी जानकारी दर्ज करें।</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add / Edit Form Screen (Page 2) -->
+        <div id="addFormSection" class="hidden card">
+            <button class="btn btn-back" onclick="showDashboard()">⬅ वापस जाएँ (Cancel)</button>
+            <h2 id="formHeaderTitle" style="color: var(--primary); text-align: center; margin-top: 0;">🚂 नया यात्रा विवरण दर्ज करें</h2>
+            
+            <form id="travelForm" onsubmit="handleFormSubmit(event)">
+                <!-- Hidden Field to track Edit Mode -->
+                <input type="hidden" id="editEntryId" value="">
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>यात्री का मुख्य नाम (Main Guest Name):</label>
+                        <input type="text" id="name" required placeholder="जैसे: राहुल शर्मा">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>मोबाइल नंबर (Mobile Number):</label>
+                        <input type="tel" id="phone" required placeholder="जैसे: 9876543210" pattern="[0-9]{10}">
+                    </div>
+
+                    <div class="form-group">
+                        <label>कुल सदस्य संख्या (Total Members):</label>
+                        <input type="number" id="members" required min="1" value="1" onchange="updateMemberFields()" oninput="updateMemberFields()">
+                    </div>
+
+                    <div class="form-group">
+                        <label>यात्रा का माध्यम (Transport Mode):</label>
+                        <select id="transport" onchange="updateTransportFields(); updateMemberFields();">
+                            <option value="ट्रेन (Train)">🚂 ट्रेन (Train)</option>
+                            <option value="फ्लाइट (Flight)">✈️ फ्लाइट (Flight)</option>
+                            <option value="बस (Bus)">🚌 बस (Bus)</option>
+                            <option value="गाड़ी (Car)">🚗 अपनी गाड़ी (Car)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>ट्रेन / फ्लाइट / गाड़ी नंबर (Number):</label>
+                        <input type="text" id="vehicleNo" placeholder="जैसे: 12625 (Kerala Exp) या इंडिगो 6E-204">
+                    </div>
+
+                    <div class="form-group train-only">
+                        <label>कोच और सीट नंबर (Coach & Seat No.):</label>
+                        <input type="text" id="coachNo" placeholder="जैसे: B2 - 45, 46">
+                    </div>
+
+                    <div class="form-group flight-only">
+                        <label>सीट नंबर (Seat No.):</label>
+                        <input type="text" id="coachNo" placeholder="जैसे: 12A, 45B">
+                    </div>
+
+                    <div class="form-group bus-only">
+                        <label>सीट नंबर (Seat No.):</label>
+                        <input type="text" id="coachNo" placeholder="जैसे: 1, 2, 3">
+                    </div>
+
+                    <div class="form-group">
+                        <label>कहाँ से आ रहे हैं (From City):</label>
+                        <input type="text" id="fromCity" required placeholder="जैसे: भोपाल या दिल्ली">
+                    </div>
+
+                    <div class="form-group">
+                        <label>कहाँ तक जाना है (Destination):</label>
+                        <input type="text" id="toCity" required placeholder="जैसे: विवाह स्थल / स्टेशन">
+                    </div>
+
+                    <div class="form-group">
+                        <label>पहुँचने की तिथि एवं समय (Arrival Date & Time):</label>
+                        <input type="datetime-local" id="dateTime" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>पिकअप की आवश्यकता (Pickup Requirement):</label>
+                        <select id="pickupStatus">
+                            <option value="पिकअप चाहिए">🚗 पिकअप चाहिए (Pickup Needed)</option>
+                            <option value="पिकअप नहीं चाहिए">❌ पिकअप नहीं चाहिए (Self Arranged)</option>
+                            <option value="पिकअप पूर्ण">✅ पिकअप हो गया (Completed)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label>अतिरिक्त टिप्पणी / विशेष जानकारी (Additional Comments):</label>
+                        <textarea id="comments" rows="2" placeholder="जैसे: बुजुर्ग सदस्य साथ हैं, सामान ज्यादा है आदि..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Member Names Section -->
+                <div class="member-names-section" id="memberNamesSection" style="display: none;">
+                    <h4>👥 यात्रियों के नाम दर्ज करें (Enter Member Names)</h4>
+                    <div class="member-input-grid" id="memberNamesGrid">
+                        <!-- Dynamic member input fields will be generated here -->
+                    </div>
+                </div>
+
+                <button type="submit" id="saveSubmitBtn" class="btn btn-block" style="margin-top: 10px; font-size: 17px;">💾 सुरक्षित करें (Save & Update)</button>
+            </form>
+        </div>
+
+    </div>
+
+    <script>
+        // Backend API Endpoint - uses whatever URL the page was loaded from
+        const API_ENDPOINT = `${window.location.origin}/api/cloud-store`;
+        const LOCAL_STORAGE_KEY = "harshalWeddingTravelLocalBackup_2026";
+        
+        let travelData = [];
+        let userRole = 'normal'; // 'normal' or 'admin'
+        const PIN_1 = "2026"; // Normal User PIN
+        const PIN_2 = "1112"; // Admin PIN
+
+        window.onload = function() {
+            if(sessionStorage.getItem('isLoggedIn') === 'true') {
+                userRole = sessionStorage.getItem('userRole') || 'normal';
+                document.getElementById('passcodeScreen').classList.add('hidden');
+                document.getElementById('mainDashboard').classList.remove('hidden');
+                updateUserRoleBadge();
+                loadAllData();
+            }
+        };
+
+        // Update user role badge display
+        function updateUserRoleBadge() {
+            const badge = document.getElementById('userRoleBadge');
+            if (isAdmin()) {
+                badge.innerHTML = '👨‍💼 Admin';
+                badge.style.background = '#e3f2fd';
+                badge.style.color = '#1976d2';
+                badge.style.borderColor = '#90caf9';
+            } else {
+                badge.innerHTML = '👤 User';
+                badge.style.background = '#fff3e0';
+                badge.style.color = '#e65100';
+                badge.style.borderColor = '#ffe0b2';
+            }
+        }
+
+        // Logout function
+        function logout() {
+            if (confirm('क्या आप वाकई लॉगआउट करना चाहते हैं?')) {
+                sessionStorage.removeItem('isLoggedIn');
+                sessionStorage.removeItem('userRole');
+                userRole = 'normal';
+                
+                document.getElementById('mainDashboard').classList.add('hidden');
+                document.getElementById('addFormSection').classList.add('hidden');
+                document.getElementById('passcodeScreen').classList.remove('hidden');
+                document.getElementById('pinInput').value = '';
+                document.getElementById('pinInput').focus();
+            }
+        }
+
+        // Check if user is admin
+        function isAdmin() {
+            return userRole === 'admin';
+        }
+
+        // Passcode Validation
+        function checkPin() {
+            const pin = document.getElementById('pinInput').value.trim();
+            if (pin === PIN_1) {
+                sessionStorage.setItem('isLoggedIn', 'true');
+                sessionStorage.setItem('userRole', 'normal');
+                userRole = 'normal';
+                document.getElementById('passcodeScreen').classList.add('hidden');
+                document.getElementById('mainDashboard').classList.remove('hidden');
+                document.getElementById('pinInput').value = '';
+                updateUserRoleBadge();
+                loadAllData();
+            } else if (pin === PIN_2) {
+                sessionStorage.setItem('isLoggedIn', 'true');
+                sessionStorage.setItem('userRole', 'admin');
+                userRole = 'admin';
+                document.getElementById('passcodeScreen').classList.add('hidden');
+                document.getElementById('mainDashboard').classList.remove('hidden');
+                document.getElementById('pinInput').value = '';
+                updateUserRoleBadge();
+                loadAllData();
+            } else {
+                alert("गलत पिन! कृपया सही परिवार सुरक्षा कोड दर्ज करें।");
+            }
+        }
+
+        // Fetch Data from Backend with LocalStorage Fallback
+        async function loadAllData() {
+            // First load local backup instantly
+            const localData = localStorage.getItem(LOCAL_STORAGE_KEY);
+            if (localData) {
+                try { travelData = JSON.parse(localData); } catch(e){}
+                renderTable();
+            }
+
+            // Sync with Backend for live shared entries across all users
+            try {
+                const response = await fetch(API_ENDPOINT, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                if (response.ok) {
+                    const backendData = await response.json();
+                    if (Array.isArray(backendData)) {
+                        travelData = backendData;
+                        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(travelData));
+                        renderTable();
+                        document.getElementById('syncStatusBadge').innerHTML = "🟢 Live Sync Active (All Users Can See Data)";
+                    }
+                } else {
+                    throw new Error('Backend response error');
+                }
+            } catch (err) {
+                console.warn("Backend fetch error, using local storage mode.", err);
+                document.getElementById('syncStatusBadge').innerHTML = "🟡 Local Mode (Check Internet / Server)";
+            }
+        }
+
+        // Sync Data to Backend and LocalStorage
+        async function syncData(newDataArray) {
+            travelData = newDataArray;
+            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(travelData));
+            renderTable();
+
+            try {
+                const response = await fetch(API_ENDPOINT, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(travelData)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Backend upload error');
+                }
+
+                document.getElementById('syncStatusBadge').innerHTML = "🟢 Data Saved Successfully";
+                setTimeout(() => {
+                    loadAllData(); // Refresh from backend
+                }, 500);
+            } catch (err) {
+                console.error("Backend sync error:", err);
+                document.getElementById('syncStatusBadge').innerHTML = "🔴 Sync Failed! Saved Locally";
+            }
+        }
+
+        // Navigation
+        function openAddForm() {
+            document.getElementById('editEntryId').value = "";
+            document.getElementById('travelForm').reset();
+            document.getElementById('formHeaderTitle').innerText = "🚂 नया यात्रा विवरण दर्ज करें";
+            document.getElementById('saveSubmitBtn').innerText = "💾 सुरक्षित करें (Save Details)";
+            
+            updateTransportFields();
+            updateMemberFields();
+            
+            document.getElementById('mainDashboard').classList.add('hidden');
+            document.getElementById('addFormSection').classList.remove('hidden');
+            window.scrollTo(0, 0);
+        }
+
+        function showDashboard() {
+            document.getElementById('addFormSection').classList.add('hidden');
+            document.getElementById('mainDashboard').classList.remove('hidden');
+            window.scrollTo(0, 0);
+        }
+
+        // Update transport-specific fields
+        function updateTransportFields() {
+            const transport = document.getElementById('transport').value;
+            const formGrid = document.querySelector('.form-grid');
+            
+            // Remove all transport classes
+            formGrid.classList.remove('transport-train', 'transport-flight', 'transport-bus');
+            
+            // Add appropriate class based on selected transport
+            if (transport.includes('ट्रेन') || transport.includes('Train')) {
+                formGrid.classList.add('transport-train');
+                document.getElementById('vehicleNo').setAttribute('placeholder', 'जैसे: 12625 (Kerala Exp)');
+                document.getElementById('vehicleNo').required = true;
+            } else if (transport.includes('फ्लाइट') || transport.includes('Flight')) {
+                formGrid.classList.add('transport-flight');
+                document.getElementById('vehicleNo').setAttribute('placeholder', 'जैसे: इंडिगो 6E-204');
+                document.getElementById('vehicleNo').required = true;
+            } else if (transport.includes('बस') || transport.includes('Bus')) {
+                formGrid.classList.add('transport-bus');
+                document.getElementById('vehicleNo').setAttribute('placeholder', 'जैसे: राज बस या आरिहंत');
+                document.getElementById('vehicleNo').required = true;
+            } else {
+                // Car - hide vehicle number requirement
+                document.getElementById('vehicleNo').setAttribute('placeholder', 'जैसे: MH-01-AB-1234 (वैकल्पिक)');
+                document.getElementById('vehicleNo').required = false;
+            }
+        }
+
+        // Update member input fields
+        function updateMemberFields() {
+            const members = parseInt(document.getElementById('members').value) || 1;
+            const memberNamesSection = document.getElementById('memberNamesSection');
+            const memberNamesGrid = document.getElementById('memberNamesGrid');
+            
+            if (members > 1) {
+                memberNamesSection.style.display = 'block';
+                memberNamesGrid.innerHTML = '';
+                
+                for (let i = 1; i <= members; i++) {
+                    const div = document.createElement('div');
+                    div.className = 'member-input-group';
+                    div.innerHTML = `
+                        <label style="font-weight: bold; color: var(--primary); min-width: 60px;">सदस्य ${i}:</label>
+                        <input type="text" class="member-name" placeholder="नाम दर्ज करें" data-index="${i}">
+                    `;
+                    memberNamesGrid.appendChild(div);
+                }
+            } else {
+                memberNamesSection.style.display = 'none';
+            }
+        }
+
+        // Get all member names
+        function getAllMemberNames() {
+            const memberNames = [];
+            const memberInputs = document.querySelectorAll('.member-name');
+            memberInputs.forEach(input => {
+                memberNames.push(input.value.trim() || `सदस्य ${memberNames.length + 1}`);
+            });
+            return memberNames;
+        }
+
+        // Submit Form (Add or Edit)
+        function handleFormSubmit(e) {
+            e.preventDefault();
+
+            const transport = document.getElementById('transport').value;
+            const vehicleNo = document.getElementById('vehicleNo').value.trim();
+            
+            // Validate vehicle number for non-car transports
+            if (!transport.includes('गाड़ी') && !transport.includes('Car') && !vehicleNo) {
+                alert("कृपया यात्रा का नंबर दर्ज करें (ट्रेन/फ्लाइट/बस नंबर)!");
+                return;
+            }
+
+            const editId = document.getElementById('editEntryId').value;
+            
+            const entryData = {
+                id: editId ? editId : Date.now().toString(),
+                name: document.getElementById('name').value.trim(),
+                phone: document.getElementById('phone').value.trim(),
+                members: parseInt(document.getElementById('members').value) || 1,
+                transport: document.getElementById('transport').value,
+                vehicleNo: document.getElementById('vehicleNo').value.trim(),
+                coachNo: document.getElementById('coachNo').value.trim() || 'लागू नहीं',
+                fromCity: document.getElementById('fromCity').value.trim(),
+                toCity: document.getElementById('toCity').value.trim(),
+                dateTime: document.getElementById('dateTime').value,
+                pickupStatus: document.getElementById('pickupStatus').value,
+                comments: document.getElementById('comments').value.trim() || 'कोई टिप्पणी नहीं',
+                memberNames: getAllMemberNames(),
+                updatedAt: Date.now()
+            };
+
+            let updatedList = [...travelData];
+
+            if (editId) {
+                // Edit existing record
+                const index = updatedList.findIndex(item => String(item.id) === String(editId));
+                if (index !== -1) {
+                    updatedList[index] = entryData;
+                } else {
+                    updatedList.unshift(entryData);
+                }
+                alert("यात्रा विवरण सफलतापूर्वक संशोधित हो गया है!");
+            } else {
+                // Add new record
+                updatedList.unshift(entryData);
+                alert("नया यात्रा विवरण सफलतापूर्वक सहेज लिया गया है!");
+            }
+
+            // Immediately switch to Page 1
+            showDashboard();
+            
+            // Sync in background and re-render
+            syncData(updatedList);
+        }
+
+        // EDIT Functionality (Triggered from Page 1 Summary Table)
+        function editEntry(id) {
+            const item = travelData.find(x => String(x.id) === String(id));
+            if (!item) {
+                alert("विवरण नहीं मिला!");
+                return;
+            }
+
+            // Populate Form Fields
+            document.getElementById('editEntryId').value = item.id;
+            document.getElementById('name').value = item.name || '';
+            document.getElementById('phone').value = item.phone || '';
+            document.getElementById('members').value = item.members || 1;
+            document.getElementById('transport').value = item.transport || 'ट्रेन (Train)';
+            document.getElementById('vehicleNo').value = item.vehicleNo || '';
+            document.getElementById('coachNo').value = item.coachNo === 'लागू नहीं' ? '' : item.coachNo;
+            document.getElementById('fromCity').value = item.fromCity || '';
+            document.getElementById('toCity').value = item.toCity || '';
+            document.getElementById('dateTime').value = item.dateTime || '';
+            document.getElementById('pickupStatus').value = item.pickupStatus || 'पिकअप चाहिए';
+            document.getElementById('comments').value = item.comments === 'कोई टिप्पणी नहीं' ? '' : item.comments;
+
+            // Restore member names
+            updateTransportFields();
+            updateMemberFields();
+            if (item.memberNames && Array.isArray(item.memberNames)) {
+                const memberInputs = document.querySelectorAll('.member-name');
+                memberInputs.forEach((input, index) => {
+                    if (item.memberNames[index]) {
+                        input.value = item.memberNames[index];
+                    }
+                });
+            }
+
+            // Change Form Labels
+            document.getElementById('formHeaderTitle').innerText = "✏️ यात्रा विवरण संशोधित करें (Edit Entry)";
+            document.getElementById('saveSubmitBtn').innerText = "🔄 अपडेट करें (Update Info)";
+
+            // Switch to Form Page
+            document.getElementById('mainDashboard').classList.add('hidden');
+            document.getElementById('addFormSection').classList.remove('hidden');
+            window.scrollTo(0, 0);
+        }
+
+        // Toggle Pickup Status directly from Page 1
+        function togglePickup(id) {
+            let updatedList = travelData.map(item => {
+                if (String(item.id) === String(id)) {
+                    let nextStatus = 'पिकअप चाहिए';
+                    if (item.pickupStatus === 'पिकअप चाहिए') nextStatus = 'पिकअप पूर्ण';
+                    else if (item.pickupStatus === 'पिकअप पूर्ण') nextStatus = 'पिकअप नहीं चाहिए';
+                    else nextStatus = 'पिकअप चाहिए';
+                    
+                    return { ...item, pickupStatus: nextStatus };
+                }
+                return item;
+            });
+
+            syncData(updatedList);
+        }
+
+        // Delete Entry
+        function deleteEntry(id) {
+            if (confirm("क्या आप वाकई यह यात्रा विवरण हटाना चाहते हैं?")) {
+                let updatedList = travelData.filter(item => String(item.id) !== String(id));
+                syncData(updatedList);
+            }
+        }
+
+        // Render Table & KPI Summary
+        function renderTable() {
+            const tbody = document.getElementById('tableBody');
+            const emptyMsg = document.getElementById('emptyMessage');
+            const tableEl = document.getElementById('travelTable');
+            
+            tbody.innerHTML = '';
+            let totalPassengers = 0;
+            let pendingPickupsCount = 0;
+            
+            if (!travelData || travelData.length === 0) {
+                tableEl.style.display = 'none';
+                emptyMsg.style.display = 'block';
+            } else {
+                tableEl.style.display = 'table';
+                emptyMsg.style.display = 'none';
+                
+                travelData.forEach((item, index) => {
+                    totalPassengers += (parseInt(item.members) || 1);
+                    if(item.pickupStatus === 'पिकअप चाहिए') pendingPickupsCount++;
+
+                    let badgeClass = 'pickup-no';
+                    if(item.pickupStatus === 'पिकअप चाहिए') badgeClass = 'pickup-yes';
+                    if(item.pickupStatus === 'पिकअप पूर्ण') badgeClass = 'pickup-done';
+
+                    const dateObj = new Date(item.dateTime);
+                    const formattedDate = isNaN(dateObj) ? item.dateTime : dateObj.toLocaleString('hi-IN', { dateStyle: 'medium', timeStyle: 'short' });
+
+                    const tr = document.createElement('tr');
+                    const adminActions = isAdmin() ? `
+                                <button class="action-btn edit-btn" onclick="editEntry('${item.id}')" title="जानकारी संशोधित करें">✏️ Edit</button>
+                                <button class="action-btn status-btn" onclick="togglePickup('${item.id}')" title="पिकअप स्थिति बदलें">🔄 Change Status</button>
+                                <button class="action-btn del-btn" onclick="deleteEntry('${item.id}')" title="रिकॉर्ड हटाएं">🗑️ Delete</button>
+                    ` : '';
+                    
+                    tr.innerHTML = `
+                        <td><strong>${index + 1}</strong></td>
+                        <td><strong>${item.name || ''}</strong><br>📞 <a href="tel:${item.phone}" style="color:var(--primary); font-weight:bold; text-decoration:none;">${item.phone || ''}</a><br><small style="color:#555;">(${item.members || 1} यात्री)</small>${item.memberNames && Array.isArray(item.memberNames) && item.memberNames.length > 1 ? `<br><small style="color:#888; font-style: italic;">सदस्य: ${item.memberNames.join(', ')}</small>` : ''}</td>
+                        <td>${item.transport || ''}<br><strong>${item.vehicleNo || ''}</strong></td>
+                        <td>${item.coachNo === 'लागू नहीं' || !item.coachNo ? '' : item.coachNo}</td>
+                        <td>${item.fromCity || ''} ➔ ${item.toCity || ''}</td>
+                        <td>${formattedDate}</td>
+                        <td><span class="badge-pickup ${badgeClass}">${item.pickupStatus}</span></td>
+                        <td><small>${item.comments === 'कोई टिप्पणी नहीं' || !item.comments ? '' : item.comments}</small></td>
+                        <td>
+                            <div class="action-btns">
+                                ${adminActions}
+                            </div>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+
+            document.getElementById('totalPax').innerText = totalPassengers;
+            document.getElementById('totalBookings').innerText = travelData.length;
+            document.getElementById('pendingPickups').innerText = pendingPickupsCount;
+        }
+
+        // Live Search Filter
+        function filterTable() {
+            let input = document.getElementById('searchInput').value.toLowerCase();
+            let rows = document.getElementById('tableBody').getElementsByTagName('tr');
+            
+            for (let i = 0; i < rows.length; i++) {
+                let text = rows[i].textContent.toLowerCase();
+                rows[i].style.display = text.includes(input) ? "" : "none";
+            }
+        }
+
+        // WhatsApp Summary Generator
+        function generateWhatsAppSummary() {
+            if (!travelData || travelData.length === 0) {
+                alert("समरी बनाने के लिए कोई डेटा उपलब्ध नहीं है।");
+                return;
+            }
+
+            let text = "✨ *हर्षल का शुभ विवाह - यात्रा एवं पिकअप समरी* ✨\n\n";
+            
+            travelData.forEach((item, index) => {
+                const dateObj = new Date(item.dateTime);
+                const d = isNaN(dateObj) ? item.dateTime : dateObj.toLocaleString('hi-IN', { dateStyle: 'short', timeStyle: 'short' });
+                text += `${index + 1}. *${item.name || 'N/A'}* (${item.members || 1} लोग)\n`;
+                
+                // Add member names if available
+                if (item.memberNames && Array.isArray(item.memberNames) && item.memberNames.length > 1) {
+                    text += `   सदस्य: ${item.memberNames.join(', ')}\n`;
+                }
+                
+                text += `   📞 ${item.phone || 'N/A'}\n`;
+                text += `   🚂 ${item.transport || 'N/A'}: *${item.vehicleNo || 'N/A'}* (कोच: ${item.coachNo === 'लागू नहीं' || !item.coachNo ? 'N/A' : item.coachNo})\n`;
+                text += `   📍 रूट: ${item.fromCity || 'N/A'} ➔ ${item.toCity || 'N/A'}\n`;
+                text += `   ⏰ आगमन: ${d}\n`;
+                text += `   🚗 पिकअप: ${item.pickupStatus || 'N/A'}\n`;
+                text += `   💬 टिप्पणी: ${item.comments === 'कोई टिप्पणी नहीं' || !item.comments ? 'कोई नहीं' : item.comments}\n\n`;
+            });
+            
+            text += "🌟 *अनुज के शादी में बढ़ चढ़ कर हिस्सा लें और बुक करें टिकट!* 🌟\n";
+            text += "कृपया अपना यात्रा विवरण ऐप में अपडेट करें।";
+
+            // Try clipboard API first (works on desktop)
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showCopyModal(text, true);
+                }).catch(err => {
+                    showCopyModal(text, false);
+                });
+            } else {
+                // Fallback for mobile devices
+                showCopyModal(text, false);
+            }
+        }
+
+        // Show copy modal for mobile compatibility
+        function showCopyModal(text, copied) {
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 10000;
+            `;
+
+            const content = document.createElement('div');
+            content.style.cssText = `
+                background: white;
+                border-radius: 12px;
+                padding: 25px;
+                max-width: 90%;
+                max-height: 80vh;
+                overflow-y: auto;
+                box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            `;
+
+            content.innerHTML = `
+                <h3 style="color: #8B0000; margin-top: 0; text-align: center;">📋 व्हाट्सएप समरी</h3>
+                <textarea id="summaryText" readonly style="
+                    width: 100%;
+                    height: 300px;
+                    padding: 12px;
+                    border: 1px solid #ccc;
+                    border-radius: 8px;
+                    font-size: 13px;
+                    font-family: 'Courier New', monospace;
+                    resize: vertical;
+                    box-sizing: border-box;
+                ">${text}</textarea>
+                <div style="margin-top: 15px; display: flex; gap: 10px; justify-content: center;">
+                    <button onclick="copyToClipboard()" style="
+                        background: #25D366;
+                        color: white;
+                        border: none;
+                        padding: 12px 20px;
+                        border-radius: 8px;
+                        cursor: pointer;
+                        font-weight: bold;
+                        font-size: 14px;
+                    ">📋 कॉपी करें (Copy)</button>
+                    <button onclick="this.parentElement.parentElement.parentElement.remove()" style="
+                        background: #555;
+                        color: white;
+                        border: none;
+                        padding: 12px 20px;
+                        border-radius: 8px;
+                        cursor: pointer;
+                        font-weight: bold;
+                        font-size: 14px;
+                    ">बंद करें (Close)</button>
+                </div>
+                ${copied ? '<p style="color: #28a745; text-align: center; margin-top: 10px; font-weight: bold;">✅ डिवाइस क्लिपबोर्ड में कॉपी हो गया!</p>' : ''}
+            `;
+
+            modal.appendChild(content);
+            document.body.appendChild(modal);
+            modal.onclick = function(e) {
+                if (e.target === modal) modal.remove();
+            };
+        }
+
+        // Copy to clipboard function
+        function copyToClipboard() {
+            const textarea = document.getElementById('summaryText');
+            textarea.select();
+            document.execCommand('copy');
+            alert('✅ व्हाट्सएप समरी सफलतापूर्वक कॉपी हो गई है! अब इसे पारिवारिक व्हाट्सएप ग्रुप में शेयर करें।');
+        }
+    </script>
+</body>
+</html>
